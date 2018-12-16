@@ -7,15 +7,21 @@ import time
 import bs4
 
 driver = webdriver.Chrome(executable_path='./chromedriver')
-url = 'https://mobile.bet365.com/?apptype=&appversion=&cb=1544921750#/AS/B12/'
+url = 'https://mobile.bet365.com/#type=Splash;key=12;ip=0;lng=32'
 driver.get(url)
-#time.sleep(10)
+time.sleep(10)
 #elem = driver.find_element_by_class_name("ff-Competitor_Name")
-WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'Splash')))
+#WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'Splash')))
 pSource= driver.page_source
 
 soup = bs4.BeautifulSoup(pSource, "html.parser")
-for data in soup.findAll(id='Splash'):
-    for res in data.find_all('span'):
-        print(res.text)
+print('competitor_name:')
+for data in soup.findAll('div',{'class': 'ff-Competitor_Name'}):
+    print(data.text)
+print('oppName:')
+for data in soup.findAll('span',{'class': 'ip-Participant_OppName'}):
+    print(data.text)
+print('oppOdd:')
+for data in soup.findAll('span',{'class': 'ip-Participant_OppOdds'}):
+    print(data.text)
 driver.close()
