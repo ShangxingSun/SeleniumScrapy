@@ -1,0 +1,33 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+import time
+import bs4
+import json
+
+driver = webdriver.Chrome(executable_path='./chromedriver')
+url = 'https://mobile.bet365.com/#type=Splash;key=1;ip=0;lng=32'
+driver.get(url)
+time.sleep(10)
+pSource = driver.page_source
+
+soup = bs4.BeautifulSoup(pSource, "html.parser")
+loc = soup.find(text='England Premier League').parent.parent['data-sportskey']
+plurl = "https://mobile.bet365.com/#type=Coupon;key=" + loc + ";ip=0;lng=32;anim=1"
+driver.get(plurl)
+time.sleep(10)
+pSource = driver.page_source
+
+
+
+soup = bs4.BeautifulSoup(pSource, "html.parser")
+for data in soup.findAll('div', {'class': 'ippg-Market_CompetitorName'}):
+    #x['competitor'].append(data.text)
+    print(data.text)
+
+driver.close()
+
+
+
